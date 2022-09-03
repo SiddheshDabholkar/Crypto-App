@@ -1,11 +1,11 @@
-import { StyleSheet, Text, View } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import Onboarder from "./Onboarder";
 import List from "./List";
 import Single from "./Single";
+import { RootStack } from "./index.type";
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootStack>();
 
 const Screens = () => {
   return (
