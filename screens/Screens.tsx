@@ -17,8 +17,21 @@ const Screens = () => {
           headerShown: false,
         }}
       />
-      <Stack.Screen name="List" component={List} />
-      <Stack.Screen name="Single" component={Single} />
+      <Stack.Screen
+        name="List"
+        component={List}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Single"
+        component={Single}
+        options={({ route }) => ({
+          title: route.params.data.name,
+          headerShadowVisible: false,
+        })}
+      />
     </Stack.Navigator>
   );
 };
