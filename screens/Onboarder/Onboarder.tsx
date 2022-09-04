@@ -67,6 +67,7 @@ const Onboarder = () => {
         <View style={[styles.Indicator]}>
           {data.map((d, i) => (
             <Indicators
+              key={i.toString()}
               activeIndex={activeIndex}
               index={i}
               translateX={translateX}

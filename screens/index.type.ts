@@ -4,6 +4,6 @@ export type RootStack = {
   Onboarder: undefined;
   List: undefined;
   Single: {
-    data: GetList;
+    data: GetList | undefined;
   };
 };

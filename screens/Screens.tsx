@@ -27,8 +27,11 @@ const Screens = () => {
       <Stack.Screen
         name="Single"
         component={Single}
+        initialParams={{
+          data: undefined,
+        }}
         options={({ route }) => ({
-          title: route.params.data.name,
+          title: route?.params?.data?.name,
           headerShadowVisible: false,
         })}
       />

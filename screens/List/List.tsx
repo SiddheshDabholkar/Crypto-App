@@ -11,7 +11,14 @@ import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { FlatList } from "react-native-gesture-handler";
 import type { GetList, ListType } from "./List.type";
-import Animated, { FadeIn, Layout, ZoomOut } from "react-native-reanimated";
+import Animated, {
+  FadeIn,
+  FadeInDown,
+  FadeInUp,
+  FadeOut,
+  Layout,
+  ZoomOut,
+} from "react-native-reanimated";
 import { useNavigation } from "@react-navigation/native";
 import { RootStack } from "../index.type";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -40,11 +47,12 @@ const List: React.FC<ListType> = () => {
   useEffect(() => {
     if (search === "") {
       setSearchedData(data);
+    } else {
+      const searched = data.filter((d) =>
+        d.name.toLowerCase().includes(search.toLowerCase())
+      );
+      setSearchedData(searched);
     }
-    const searched = data.filter((d) =>
-      d.name.toLowerCase().includes(search.toLowerCase())
-    );
-    setSearchedData(searched);
   }, [search]);
 
   useEffect(() => {
@@ -74,24 +82,8 @@ const List: React.FC<ListType> = () => {
   }
 
   if (error) {
-    return;
+    console.log("error", error);
   }
-
-  const Header = () => {
-    return (
-      <View style={[styles.Header]}>
-        <TextInput
-          style={styles.input}
-          onChangeText={(text) => onChangeSearch(text)}
-          value={search}
-          selectionColor="#000"
-        />
-        <Pressable>
-          <Text>Search</Text>
-        </Pressable>
-      </View>
-    );
-  };
 
   const renderItem = ({ item, index }: ListRenderItemInfo<GetList>) => {
     return (
@@ -104,7 +96,7 @@ const List: React.FC<ListType> = () => {
       >
         <Animated.View
           style={[styles.Card]}
-          exiting={ZoomOut}
+          exiting={FadeIn}
           layout={Layout.delay(50)}
           entering={initialMode.current ? FadeIn.delay(100 * index) : FadeIn}
         >
@@ -126,7 +118,11 @@ const List: React.FC<ListType> = () => {
 
   const EmptyData = () => {
     return (
-      <View style={styles.EmptyData}>
+      <Animated.View
+        style={styles.EmptyData}
+        entering={FadeInUp}
+        exiting={FadeInDown}
+      >
         <Text>No such crypto currency found</Text>
         <View style={styles.Tags}>
           {CryptoData.map((d) => (
@@ -137,7 +133,7 @@ const List: React.FC<ListType> = () => {
             </Pressable>
           ))}
         </View>
-      </View>
+      </Animated.View>
     );
   };
 
@@ -146,7 +142,19 @@ const List: React.FC<ListType> = () => {
       <FlatList
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
-        ListHeaderComponent={Header()}
+        ListHeaderComponent={
+          <View style={[styles.Header]}>
+            <TextInput
+              style={styles.input}
+              onChangeText={onChangeSearch}
+              value={search}
+              selectionColor="#000"
+            />
+            <Pressable>
+              <Text>Search</Text>
+            </Pressable>
+          </View>
+        }
         stickyHeaderIndices={[0]}
         stickyHeaderHiddenOnScroll={true}
         data={searchedData}
