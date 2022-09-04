@@ -1,18 +1,14 @@
 import React, { useRef } from "react";
-import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import Animated, {
   Extrapolate,
-  FadeInUp,
   interpolate,
   useAnimatedStyle,
-  useDerivedValue,
 } from "react-native-reanimated";
 import { PageProps } from "./Page.type";
 import LottieView from "lottie-react-native";
 
 const { height, width } = Dimensions.get("window");
-
-const AnimatedLottie = Animated.createAnimatedComponent(LottieView);
 
 const Page: React.FC<PageProps> = ({ data, index, translateX, translateY }) => {
   const animation = useRef(null);
@@ -26,27 +22,65 @@ const Page: React.FC<PageProps> = ({ data, index, translateX, translateY }) => {
       [20, 30, 20],
       Extrapolate.CLAMP
     );
+    const opacity = interpolate(
+      translateX.value,
+      inputRange,
+      [0, 1, 0],
+      Extrapolate.CLAMP
+    );
+    const left = interpolate(
+      translateX.value,
+      inputRange,
+      [0, width / 7, width],
+      Extrapolate.CLAMP
+    );
     return {
       fontSize,
+      opacity,
+      left,
     };
   });
-  // const rDescriptionStyle = useAnimatedStyle(() => {});
+  const rDescriptionStyle = useAnimatedStyle(() => {
+    const fontSize = interpolate(
+      translateX.value,
+      inputRange,
+      [12, 14, 12],
+      Extrapolate.CLAMP
+    );
+    const opacity = interpolate(
+      translateX.value,
+      inputRange,
+      [0, 1, 0],
+      Extrapolate.CLAMP
+    );
+    const left = interpolate(
+      translateX.value,
+      inputRange,
+      [800, 10, 800],
+      Extrapolate.CLAMP
+    );
+    return {
+      fontSize,
+      opacity,
+      left,
+    };
+  });
 
   return (
     <Animated.View style={[styles.container]}>
-      <AnimatedLottie
+      <LottieView
         autoPlay
         ref={animation}
         style={{
-          width: 300,
           height: 300,
+          width: 300,
         }}
         source={data.img}
       />
       <Animated.Text style={[styles.title, rTitleStyle]}>
         {data.title}
       </Animated.Text>
-      <Animated.Text style={[styles.description]}>
+      <Animated.Text style={[styles.description, rDescriptionStyle]}>
         {data.description}
       </Animated.Text>
     </Animated.View>
@@ -56,6 +90,10 @@ const Page: React.FC<PageProps> = ({ data, index, translateX, translateY }) => {
 export default Page;
 
 const styles = StyleSheet.create({
+  lottie: {
+    height: 300,
+    width: 300,
+  },
   container: {
     height,
     width,
