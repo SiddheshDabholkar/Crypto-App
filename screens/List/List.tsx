@@ -97,8 +97,8 @@ const List: React.FC<ListType> = () => {
         <Animated.View
           style={[styles.Card]}
           exiting={FadeIn}
-          layout={Layout.delay(50)}
-          entering={initialMode.current ? FadeIn.delay(100 * index) : FadeIn}
+          layout={Layout.delay(500)}
+          entering={initialMode.current ? FadeIn.delay(110 * index) : FadeIn}
         >
           <View style={[styles.leftCard]}>
             <Image
@@ -120,8 +120,8 @@ const List: React.FC<ListType> = () => {
     return (
       <Animated.View
         style={styles.EmptyData}
-        entering={FadeInUp}
-        exiting={FadeInDown}
+        entering={FadeInUp.delay(500)}
+        exiting={FadeInDown.delay(500)}
       >
         <Text>No such crypto currency found</Text>
         <View style={styles.Tags}>
